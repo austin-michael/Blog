@@ -15,10 +15,12 @@ export default ({ data }) => {
       <h4>{data.allMarkdownRemark.totalCount}</h4>
       {data.allMarkdownRemark.edges.map(({ node }) => (
         <div key={node.id}>
-          <span>
-            {node.frontmatter.title} - {node.frontmatter.date}
+          <a href={node.fields.slug}>
+            <h3>
+              {node.frontmatter.title} - {node.frontmatter.date}
+            </h3>
             <p>{node.excerpt}</p>
-          </span>
+          </a>
         </div>
       ))}
     </Layout>
@@ -29,7 +31,7 @@ export const Head = () => <Seo title="Home" />
 
 export const query = graphql`
   query {
-    allMarkdownRemark {
+    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
       totalCount
       edges {
         node {
@@ -38,6 +40,9 @@ export const query = graphql`
             date
             description
             title
+          }
+          fields {
+            slug
           }
           excerpt
         }
